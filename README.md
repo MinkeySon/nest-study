@@ -23,7 +23,14 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+nest 학습 레포지토리
+
+## record
+
+| index | 제목 | |
+|:-:|------|:----:|
+| 0 | [node 와 nest 개요](./record/0-node-nest.md) |
+| 1 | [node Js + Express 기본 서버 구성]((./record/1-node-express.md)) |
 
 ## Project setup
 

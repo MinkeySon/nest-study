@@ -1,4 +1,4 @@
-# 1. node Js + Express 기본 서버 구성
+# node Js + Express 기본 서버 구성
 
 
 ## 개요
@@ -9,7 +9,7 @@ node 와 express, nest 로 단순 controller 기능을 구성했을 때 어떤 �
 
 ## 본론
 
-### 1. node 로 구성
+### node 로 구성
 
 node 내장 패키지로 http 패키지가 존재한다.
 
@@ -55,7 +55,7 @@ server.listen(port, host, () => {
 
 그렇기 때문에 Express 를 사용한다!
 
-### 2. express 로 구성
+### express 로 구성
 
 ```javascript
 const express = require('express');
@@ -85,7 +85,7 @@ app.listen(3000, () => {
 
 물론 이것도 꽤 익숙한 구조이긴 하나, 이를 더 쉽게 사용하기 위해 만든것이 nest 이다.
 
-### 3. nest 로 구성
+### nest 로 구성
 
 nest 공식문서에서는 프로젝트를 구성하는데에 nest-cli 를 제공한다.
 

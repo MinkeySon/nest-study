@@ -6,7 +6,7 @@ nestjs 는 node 엔진을 사용하기 때문에 node 에 대한 기본적인 �
 
 ## 본론
 
-### 1. Node 특징
+### Node 특징
 
 node 의 특징은 크게 3가지로 다음과 같다.
 
@@ -16,7 +16,7 @@ node 의 특징은 크게 3가지로 다음과 같다.
 
 - 크로스 플랫폼: 타깃 플랫폼에 영향을 받지 않음.
 
-### 2. JIT (Just in time compilation)
+### JIT (Just in time compilation)
 
 이를 이해하기 위해선 먼저 compiled 언어와 interprited 언어의 차이를 이해하면 좋다.
 
@@ -50,7 +50,7 @@ JIT 순서는 다음과 같다.
 
 반복되는 애들은 캐싱 느낌으로 Ignition 컴파일에서 제외하고 반복 안되는 애들만 해서 컴파일 속도도 잡고 실행속도도 잡을 수 있는 JIT 컴파일러를 만들었다.
 
-### 3. Node JS 싱글 스레드
+### Node JS 싱글 스레드
 
 스레드란? 
 
@@ -90,7 +90,7 @@ Blocking 요청시
 
 ![image](./img/0-thread.png)
 
-### 4. nest
+### nest
 
 nestjs 는 Express 로 설계 됐고, Express 를 이런 프레임워크 형태로 사용하면 
 

@@ -6,7 +6,7 @@ nest 로 REST API 를 개발할 때 CRUD 컨트롤러를 구성하는 방법을 
 
 기본적으로 nest project 를 생성하면 이런식으로 src > 하위에 controller, service, module, spec 파일이 생성된다. 하지만 서비스를 만들 때 보통 도메인별로 모듈화하여 구성하기 때문에 별도의 파일로 쪼개야 한다. 
 
-![img](./img/2-img1.png)
+![img](./images/2/2-img1.png)
 
 멀티 모듈을 구성하는 방법으로 nest 에서는 nest-cli 를 권장한다. 다음과 같이 `nest g resource` 명령어를 호출하면 모듈명을 지정하고 모듈을 생성할 수 있다.
 
@@ -19,7 +19,7 @@ sonmingi@Handmkui-MacBookPro nest-study % nest g resource
 
 posts 모듈이 생성됨을 확인할 수 있다.
 
-![alt text](./img/2-img2.png)
+![alt text](./images/2/2-img2.png)
 
 ### GET
 

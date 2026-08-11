@@ -41,7 +41,7 @@ JIT 순서는 다음과 같다.
 
 1. Ignition Interpriter 로 실행
 
-![image](./img/0-jit.png)
+![image](./images/0/0-jit.png)
 
 | byte code | machine code |
 | --- | --- |
@@ -88,7 +88,7 @@ Blocking 요청시
 
 1. 처리 끝나면 Event Loop → Front 로 응답
 
-![image](./img/0-thread.png)
+![image](./images/0/0-thread.png)
 
 ### nest
 

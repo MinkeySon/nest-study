@@ -79,7 +79,7 @@ app.listen(3000, () => {
 })
 ```
 
-![image](./img/1-comp.png)
+![image](./images/1/1-comp.png)
 
 단순히 코드 라인수만 비교해도 node 로 지저분한 조건 분기처리 한것보다 훨씬 보기 편하다.
 
@@ -94,7 +94,7 @@ npm i -g @nestjs/cli
 nest new {프로젝트 명}
 ```
 
-![image](./img/1-files.png)
+![image](./images/1/1-files.png)
 
 다음과 같이 nest 의 최소 구성 파일이 생성된다.
 

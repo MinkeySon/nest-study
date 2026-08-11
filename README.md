@@ -32,6 +32,7 @@ nest 학습 레포지토리
 | 0 | [node 와 nest 개요](./record/0-node-nest.md) |
 | 1 | [node Js + Express 기본 서버 구성](./record/1-node-express.md) |
 | 2 | [controller](./record/2-controller.md) |
+| 3 | [DI & IoC](./record/3-di-ioc.md) |
 
 ## Project setup
 

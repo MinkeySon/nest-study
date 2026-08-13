@@ -1,4 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
+import { Repository } from "typeorm";
+import { Posts } from "./entities/posts.entity";
+import { InjectRepository } from "@nestjs/typeorm";
 
 export interface PostModel {
   id: number;
@@ -38,13 +41,17 @@ let posts: PostModel[] = [
 
 @Injectable()
 export class PostsService {
+  constructor(
+    @InjectRepository(Posts) // DI
+    private readonly postRepository: Repository<Posts>, // Posts Entity 를 다루는 레포지토리 선언
+  ) {}
 
   /**
    * @abstract 모든 posts를 가져오는 함수
    * @returns 모든 posts
-   */  
-  getAllPosts() {
-    return posts;
+   */
+  async getAllPosts() {
+    return this.postRepository.find(); // 모든 TypeORM 메서드는 async
   }
 
   /**
@@ -52,17 +59,25 @@ export class PostsService {
    * @param id 고유 id
    * @returns 특정 post
    */
-  getPostsById(id: number) {
-    // find 메서드는 배열에서 특정 조건을 만족하는 요소를 반환, 만약 조건을 만족하는 요소가 없다면 undefined를 반환
-    // undefined 는 boolean false 로 평가됨
-    const foundedPost = posts.find((post) => post.id === id);
+  async getPostsById(id: number) {
+    // 1. findOne() -> DB 소켓에 쿼리 날리고 아직 값이 없는 Promise<Posts> 를 즉시 반환
+    // 2. await 가 Promise 에 완료되면 깨워달라고 등록하고 함수 중단
+    // 3. 이때 스레드는 다른 요청 처리하러 감.
+    // 4. DB 응답 도착
+    // 5. 이벤트 큐에서 2번 작업 꺼냄
+    // 6. 함수 재개
+    const post = await this.postRepository.findOne({
+      // id 값이 일치하는 row 필터
+      where: {
+        id: id,
+      },
+    });
 
-    // 만약 post가 존재하지 않는다면 NotFoundException을 발생
-    if (!foundedPost) {
+    if (!post) {
       throw new NotFoundException();
     }
 
-    return foundedPost;
+    return post;
   }
 
   /**
@@ -72,19 +87,22 @@ export class PostsService {
    * @param content 내용
    * @returns 새로 생성된 post
    */
-  postPosts(author: string, title: string, content: string) {
-    const post = {
-      id: posts[posts.length - 1].id + 1,
+  async postPosts(author: string, title: string, content: string) {
+    // 1) create -> 저장할 객체 생성
+    // 2) save -> 객체 저장
+
+    const post = this.postRepository.create({
+      // key == value 변수 명이 같으면 하나만 써도 됨.
       author,
       title,
       content,
       likeCount: 0,
       commentCount: 0,
-    };
+    });
 
-    posts.push(post);
+    const newPost = await this.postRepository.save(post);
 
-    return post;
+    return newPost;
   }
 
   /**
@@ -95,8 +113,19 @@ export class PostsService {
    * @param content 내용
    * @returns 수정된 post
    */
-  putPostById(id: number, author?: string, title?: string, content?: string) {
-    const foundedPost = posts.find((post) => post.id === id);
+  async putPostById(
+    id: number,
+    author?: string,
+    title?: string,
+    content?: string,
+  ) {
+    // 만약에 데이터가 존재한다면 (같은 id 값이 있다면) 그냥 save 해도 업데이트
+
+    const foundedPost = await this.postRepository.findOne({
+      where: {
+        id,
+      },
+    });
 
     if (!foundedPost) {
       throw new NotFoundException();
@@ -114,12 +143,9 @@ export class PostsService {
       foundedPost.content = content;
     }
 
-    // map 순회 하면서 id 가 일치하는 post 만 업데이트
-    posts = posts.map((prevPost) =>
-      prevPost.id === id ? foundedPost : prevPost,
-    );
+    const updatedPost = await this.postRepository.save(foundedPost);
 
-    return foundedPost;
+    return updatedPost;
   }
 
   /**
@@ -127,16 +153,20 @@ export class PostsService {
    * @param id 고유 id
    * @returns 삭제된 post
    */
-  deletePostById(id: number) {
-    const foundedPost = posts.find((post) => post.id === id);
+  async deletePostById(id: number) {
+    const foundedPost = await this.postRepository.findOne({
+      where: {
+        id,
+      },
+    });
 
     if (!foundedPost) {
       throw new NotFoundException();
     }
 
     // filter 순회 하면서 id 가 일치하지 않는 post 만 남김
-    posts = posts.filter((post) => post.id !== id);
+    await this.postRepository.delete(id);
 
-    return foundedPost;
+    return id;
   }
 }

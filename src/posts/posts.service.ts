@@ -12,33 +12,6 @@ export interface PostModel {
   commentCount: number;
 }
 
-let posts: PostModel[] = [
-  {
-    id: 1,
-    author: "son",
-    title: "test post",
-    content: "this is a test post",
-    likeCount: 99999,
-    commentCount: 99999,
-  },
-  {
-    id: 2,
-    author: "son",
-    title: "test post 2",
-    content: "this is second test post",
-    likeCount: 88888,
-    commentCount: 88888,
-  },
-  {
-    id: 3,
-    author: "son",
-    title: "test post 3",
-    content: "this is a third test post",
-    likeCount: 77777,
-    commentCount: 77777,
-  },
-];
-
 @Injectable()
 export class PostsService {
   constructor(
@@ -51,7 +24,11 @@ export class PostsService {
    * @returns 모든 posts
    */
   async getAllPosts() {
-    return this.postRepository.find(); // 모든 TypeORM 메서드는 async
+    return this.postRepository.find({
+      relations: {
+        user: true,
+      },
+    });
   }
 
   /**
@@ -67,7 +44,9 @@ export class PostsService {
     // 5. 이벤트 큐에서 2번 작업 꺼냄
     // 6. 함수 재개
     const post = await this.postRepository.findOne({
-      // id 값이 일치하는 row 필터
+      relations: {
+        user: true,
+      },
       where: {
         id: id,
       },
@@ -87,13 +66,14 @@ export class PostsService {
    * @param content 내용
    * @returns 새로 생성된 post
    */
-  async postPosts(author: string, title: string, content: string) {
+  async postPosts(userId: number, title: string, content: string) {
     // 1) create -> 저장할 객체 생성
     // 2) save -> 객체 저장
 
     const post = this.postRepository.create({
-      // key == value 변수 명이 같으면 하나만 써도 됨.
-      author,
+      user: {
+        id: userId,
+      },
       title,
       content,
       likeCount: 0,
@@ -113,12 +93,7 @@ export class PostsService {
    * @param content 내용
    * @returns 수정된 post
    */
-  async putPostById(
-    id: number,
-    author?: string,
-    title?: string,
-    content?: string,
-  ) {
+  async putPostById(id: number, title?: string, content?: string) {
     // 만약에 데이터가 존재한다면 (같은 id 값이 있다면) 그냥 save 해도 업데이트
 
     const foundedPost = await this.postRepository.findOne({
@@ -129,10 +104,6 @@ export class PostsService {
 
     if (!foundedPost) {
       throw new NotFoundException();
-    }
-
-    if (author) {
-      foundedPost.author = author;
     }
 
     if (title) {

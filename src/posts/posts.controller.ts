@@ -43,11 +43,11 @@ export class PostsController {
    */
   @Post()
   postPosts(
-    @Body("author") author: string,
+    @Body("userId") userId: number,
     @Body("title") title: string,
     @Body("content") content: string,
   ) {
-    return this.postsService.postPosts(author, title, content);
+    return this.postsService.postPosts(userId, title, content);
   }
 
   /**
@@ -64,11 +64,10 @@ export class PostsController {
     @Param("id") id: string,
 
     // ? 붙이면 null 허용
-    @Body("author") author?: string,
     @Body("title") title?: string,
     @Body("content") content?: string,
   ) {
-    return this.postsService.putPostById(parseInt(id), author, title, content);
+    return this.postsService.putPostById(parseInt(id), title, content);
   }
 
   /**

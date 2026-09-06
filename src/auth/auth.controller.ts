@@ -1,25 +1,33 @@
-import { Body, Controller, Post, Headers } from "@nestjs/common";
+import { Body, Controller, Post, Headers, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
+import { MinLengthPipe, PasswordPipe } from "./pipe/password.pipe";
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { JwtTokenGuard } from "./guard/jwt-token.guard";
 
+@ApiTags("auth")
 @Controller("auth")
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post("login/email")
+  @ApiOperation({ summary: "이메일 로그인" })
   loginEmail(@Body("email") email: string, @Body("password") password: string) {
     return this.authService.loginWithEmail({ email, password });
   }
 
   @Post("register/email")
+  @ApiOperation({ summary: "이메일 회원가입" })
+  @ApiBody({ schema: { type: "object", properties: { nickname: { type: "string" }, email: { type: "string" }, password: { type: "string" } } } })
   registerEmail(
     @Body("nickname") nickname: string,
     @Body("email") email: string,
-    @Body("password") password: string,
+    @Body("password", new MinLengthPipe(8), new MinLengthPipe(3)) password: string,
   ) {
     return this.authService.registerWithEmail({ nickname, email, password });
   }
 
   @Post("token/access")
+  @UseGuards(JwtTokenGuard)
   createTokenAccess(@Headers("authorization") rawToken: string) {
     const token = this.authService.extractTokenFromHeader(rawToken, true);
 

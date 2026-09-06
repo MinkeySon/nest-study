@@ -1,12 +1,10 @@
 import { Posts } from "src/posts/entities/posts.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 import { Roles } from "../const/users.role";
+import { BaseEntity } from "src/common/entity/base.entity";
 
 @Entity()
-export class Users {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Users extends BaseEntity {
   @Column({
     unique: true,
   })
@@ -29,4 +27,5 @@ export class Users {
 
   @OneToMany(() => Posts, (post) => post.user)
   posts: Posts[];
+
 }

@@ -25,6 +25,12 @@ export class AuthService {
     return token;
   }
 
+  decodeBasicToken(token: string) {
+    const [email, password] = Buffer.from(token, 'base64').toString('utf-8').split(':');
+
+    return { email, password };
+  }
+
   verifyToken(token: string) {
     return this.jwtService.verify(token, {
       secret: JWT_SECRET,

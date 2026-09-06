@@ -1,7 +1,8 @@
-import { Body, Controller, Post, Headers } from "@nestjs/common";
+import { Body, Controller, Post, Headers, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { MinLengthPipe, PasswordPipe } from "./pipe/password.pipe";
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { JwtTokenGuard } from "./guard/jwt-token.guard";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -26,6 +27,7 @@ export class AuthController {
   }
 
   @Post("token/access")
+  @UseGuards(JwtTokenGuard)
   createTokenAccess(@Headers("authorization") rawToken: string) {
     const token = this.authService.extractTokenFromHeader(rawToken, true);
 

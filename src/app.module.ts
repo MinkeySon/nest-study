@@ -6,11 +6,13 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { Posts } from "./posts/entities/posts.entity";
 import { UsersModule } from "./users/users.module";
 import { Users } from "./users/entities/users.entity";
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
     PostsModule,
     UsersModule,
+    AuthModule,
     TypeOrmModule.forRoot({
       type: "postgres", // 데이터베이스 타입
       host: "127.0.0.1",
